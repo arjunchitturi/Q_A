@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="span16">
+	    <h2>Ajax Question Form</h2><br />
+	        <form action="" method="post" id="question_form">{% csrf_token %}
+                {% if form.non_field_errors %}
+                    {{ form.non_field_errors }}
+                {% endif %}
+	            {% for item in form %}
+		            {% include 'bootstrap/form_field.html' %}
+	            {% endfor %}
+    </div>
+</div>
+<div class="row">
+	<div class="span16">
+		<div class="actions">
+			<button onclick="ajax();return false;" class="btn success">Submit Q</button>
+			</form>
+		</div>
+	</div>
+</div>

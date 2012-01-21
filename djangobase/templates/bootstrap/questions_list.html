@@ -1,0 +1,41 @@
+{% extends "bootstrap/base.html" %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block content %}
+    <!--<div class="hero-unit">
+
+    <h1>Hello, {% if user.is_authenticated %}{{user.username}}{% endif %}!</h1> <br />
+
+    </div>-->
+    <h3>Questions</h3>
+	<table class="zebra-striped">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Question Title</td>
+                    <td>Answers</td>                            
+                    <td>Remove</td>
+                    <td># answer(s)</td>
+                </tr>
+            </thead>
+        <tbody>
+        {% if questions %}
+            {% for question in questions %}
+	            {% if question.author.id == user.id %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url bootstrap.views.view_question question.id %}">{{ question.title }}</a></td>
+                    <td><a href="{% url bootstrap.views.answer_question question.id %}">Answer this Question</a></td>
+                    <td><a href="{% url bootstrap.views.remove_question question.id %}">Delete</td>
+                    <td>{{ question.answers.count }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        {% else %}	            
+                You have no questions, <a href="{% url bootstrap.views.ask_question %}">ask one!</a>
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+    <h3>
+        <span class="label success">Question</span>
+    </h3>
+        <small>
+            <em> asked by </em>{{ question.author.username }} on {{ question.added_at }}
+        </small> <br />
+    <span class="label notice">Question title</span> <br />
+    <blockquote>
+        <em>{{ question.title }} </em>
+    </blockquote> <br />
+        <span class="label notice">Description</span> <br />
+    <blockquote>
+        <p>{{ question.text }}</p>
+    </blockquote> <br />
+        <span class="label warning">Answers</span>
+        <small><a href="{% url bootstrap.views.answer_question question.id %}">  new answer</a></small> <br />
+    <blockquote>
+        <ul> <br />
+            {% for answer in question.answers.all %}
+                <li> 
+                    <blockquote> 
+                        <!--<div style="width:500px">-->
+                            {{ answer.text }}
+                            {% if user.id == answer.author.id == question.author.id %}
+                                {% if not answer.accepted %}
+                                    <a href="{% url bootstrap.views.remove_answer answer.id question.id %}">&nbsp;&nbsp;trash it!</a>
+                                {% endif %}
+                            {% endif %}
+                        <!--</div>-->
+                    </blockquote>
+                </li> 
+            {% endfor %}
+        </ul>
+    </blockquote>
+{% endblock %}

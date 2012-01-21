@@ -1,0 +1,35 @@
+<div class="row">
+    <!--<div class="span16">-->
+        <h2>Ajax Answer Form</h2> <br/>
+	    <h3><span class="label success">Question</span></h3>
+	        <em>asked by </em>{{ question.author.username }} on {{ question.added_at }}<br />
+        <span class="label notice">Question title</span> <br />
+            <blockquote>
+                <em>{{ question.title }} </em>
+            </blockquote> <br />
+        <span class="label notice">Description</span> <br />
+            <blockquote>
+            <p>{{ question.text }}</p>
+            </blockquote> <br />
+        <form action="" method="post" id="answer_form">{% csrf_token %}
+        {% ifequal success True %}
+        <input type="hidden" id="q_id" name="qid" value="{{ question.id }}">
+        {% else %}           
+        <input type="hidden" id="q_id" name="qid" value="{{ qid }}">
+        {% endifequal %}
+                    
+        {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+            {% for item in form %}
+                {% include 'bootstrap/form_field.html' %}
+            {% endfor %}
+</div>
+    <!--</div>-->
+    <!--<div class="row">
+    <div class="span16">-->
+        <div class="actions">
+            <button onclick="answer_ajax();return false;" class="btn success">Submit A</button>
+            </form>
+        </div>
+    <!--</div>-->
+</div>
+
