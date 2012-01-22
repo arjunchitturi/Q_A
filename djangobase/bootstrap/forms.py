@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
-from bootstrap.models import Question, ExampleFields
+from bootstrap.models import Question, Answer, ExampleFields
 
 #custom text field
 class TitleField(forms.CharField):
@@ -48,6 +48,13 @@ class QuestionForm(forms.Form):
 class AnswerForm(forms.Form):
     text = EditorField()
 
+'''
+class AnswerModelForm(ModelForm):
+    pass
+    
+    class Meta:
+        model = Answer
+'''
 '''
     The following classes are for test purpose.
 '''
