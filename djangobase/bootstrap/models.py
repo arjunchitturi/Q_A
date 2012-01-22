@@ -10,7 +10,10 @@ from django.contrib.auth.models import User as DjangoUser#, AnonymousUser as Dja
 '''
 class User(models.Model):
     user = models.OneToOneField(DjangoUser)
-    is_approved = models.BooleanField(default=False)    
+    is_approved = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.user.username
 
 #This class acts as a content holder for\
 #Questions and answer.
@@ -25,11 +28,17 @@ class Content(models.Model):
 #The Question
 class Question(Content):
     title = models.CharField(max_length=300)
+    
+    def __unicode__(self):
+        return self.title
 
 #The Answer
 class Answer(Content):
     question = models.ForeignKey('Question', related_name='answers')
     accepted    = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return "Answer for "+self.question.title
 
 '''
     The following classes are for test purpose.
