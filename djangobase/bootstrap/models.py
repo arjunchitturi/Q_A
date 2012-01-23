@@ -38,7 +38,7 @@ class Answer(Content):
     accepted    = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return "Answer for "+self.question.title
+        return "Answer @ "+self.question.title
 
 '''
     The following classes are for test purpose.
@@ -47,11 +47,13 @@ class ExampleFields(models.Model):
     name = models.CharField(max_length=200)
     email = models.EmailField()
     message = models.TextField()
+
     def __unicode__(self):
         return self.name
 
 class StarWarsCharacter(models.Model):
     name = models.CharField(max_length=200, blank=False)
+
     def __unicode__(self):
         return self.name
 
