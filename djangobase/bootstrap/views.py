@@ -1,15 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 #from django.views.decorators.csrf import csrf_protect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
-from django.core.urlresolvers import reverse
+#from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils import simplejson
 
 from bootstrap.forms import QuestionForm, AnswerForm \
 #, ExampleForm, AjaxAutoComplete, PopoverForm
-from bootstrap.models import StarWarsCharacter, User, Question, Answer
+from bootstrap.models import User, Question, Answer \
+#StarWarsCharacter
+
 
 #Home Page
 def home(request):
@@ -18,6 +20,7 @@ def home(request):
     context["user"] = request.user
     context["hero_title"] = "Welcome to Q and A"
     return render_to_response("bootstrap/home.html", context)
+
 
 #new question form
 def ask_question(request):
@@ -28,6 +31,7 @@ def ask_question(request):
     RequestContext.update(csrf(request))
     return render_to_response("bootstrap/example.html", RequestContext)
 
+
 #submit question using ajax.
 def send_question(request):
     RequestContext = {}
@@ -36,11 +40,12 @@ def send_question(request):
         form = QuestionForm(request.POST)
         if form.is_valid():
             if request.user.is_authenticated():
+
                 #Do Something, e.g. save, send an email
-                title=form.cleaned_data.get('title', None)
-                text=form.cleaned_data['text']
-                user, new_or_old = User.objects.get_or_create(user=request.user)
-                qus, update_text = Question.objects.get_or_create(title=title, author=user)
+                title = form.cleaned_data.get('title', None)
+                text = form.cleaned_data['text']
+                user, new_or_old = User.objects.get_or_create(user = request.user)
+                qus, update_text = Question.objects.get_or_create(title = title, author = user)
                 qus.text = text
                 qus.save()
                 template = "bootstrap/example_form_success.html"
@@ -58,9 +63,8 @@ def send_question(request):
 
     html = render_to_string(template, RequestContext)
     response = simplejson.dumps({"success": success, "html": html})
-    return HttpResponse(response,
-                        content_type=\
-                            "application/javascript; charset=utf-8")
+    return HttpResponse(response, content_type = "application/javascript; charset = utf-8")
+
 
 #display the list of questions.
 def questions_list(request):
@@ -68,8 +72,9 @@ def questions_list(request):
     questions = Question.objects.all()
     c['questions'] = questions
     c['user'] = request.user
-    c['hero_title'] = "Hello, "+str(request.user.username)+"!"
+    c['hero_title'] = "Hello, " + str(request.user.username) + "!"
     return render_to_response('bootstrap/questions_list.html', c)
+
 
 #vew a single question, and its answers.
 def view_question(request, id):
@@ -79,12 +84,14 @@ def view_question(request, id):
     c['user'] = request.user
     return render_to_response('bootstrap/view_question.html', c)
 
+
 #delete a question.
 @login_required
 def remove_question(request, id):
     to_del = Question.objects.get(id = int(id))
     to_del.delete()
     return redirect('/questions_list')
+
 
 #form to add a new answer a question
 def answer_question(request, id):
@@ -97,8 +104,9 @@ def answer_question(request, id):
     c.update(csrf(request))
     return render_to_response('bootstrap/answer_form.html', c)
 
+
 #submit the answer using ajax.
-def send_answer(request):#, id):
+def send_answer(request):
     RequestContext = {}
     #qid = Question.objects.get(id = int(id))
     RequestContext["user"] = request.user
@@ -111,10 +119,10 @@ def send_answer(request):#, id):
         if form.is_valid():
             if request.user.is_authenticated():
                 #Do Something, e.g. save, send an email
-                text=form.cleaned_data['text']
+                text = form.cleaned_data['text']
                 user = User.objects.get(user=request.user)
                 qid = Question.objects.get(id = int(id))
-                ans = Answer.objects.create(text=text, author=user, question=qid)
+                Answer.objects.create(text=text, author=user, question=qid)
                 template = "bootstrap/example_form_success.html"
                 success = True
         else:
@@ -133,6 +141,7 @@ def send_answer(request):#, id):
                         content_type=\
                             "application/javascript; charset=utf-8")
 
+
 #delete answer for a particular question (qid).
 @login_required
 def remove_answer(request, id, qid):
@@ -140,11 +149,11 @@ def remove_answer(request, id, qid):
     to_del.delete()
     #return redirect('/questions_list')
     #return HttpResponseRedirect(reverse('view_question', args=[qid]))
-    return redirect('/view_question/'+qid)
+    return redirect('/view_question/' + qid)
 
 '''
     The following definitions are for test purpose.
-'''
+
 def ajax_form(request):
     context = {}
     context["form"] = ExampleForm()
@@ -262,4 +271,4 @@ def inside(request):
     context = {}
     context["user"] = request.user
     return render_to_response("bootstrap/inside.html", context)
-
+'''
